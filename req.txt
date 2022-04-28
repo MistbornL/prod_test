@@ -39,3 +39,4 @@ pymongo==3.12.1
 python-jose==3.3.0
 passlib==1.7.4
 python-multipart==0.0.5
+bcrypt==3.2.0

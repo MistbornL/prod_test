@@ -1,21 +1,20 @@
-# import motor.motor_asyncio
-#
-# from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
-#
-# from beanie import init_beanie
-#
-# from .config import settings
-# from td.apps.documents.document import Round, User, Game, GamePlayer
-# from td.apps.routers.game import router
-# from td.apps.server.server import sio, s_app
+import motor.motor_asyncio
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from beanie import init_beanie
+
+from .config import settings
+from prod.app.documents.document import User
+from prod.app.router.test import router
 
 
 def create_app() -> FastAPI:
     app = FastAPI()
 
     app.include_router(router)
-    app.mount("/ws", s_app)
+    # app.mount("/ws", s_app)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
@@ -28,6 +27,6 @@ def create_app() -> FastAPI:
     async def startup_event():
         client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGODB_URL)
         await init_beanie(database=client[settings.MONGODB_DATABASE_NAME],
-                          document_models=[Game, User, Round, GamePlayer])
+                          document_models=[User])
 
     return app
