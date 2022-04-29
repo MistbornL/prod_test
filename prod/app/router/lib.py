@@ -46,11 +46,13 @@ async def get_all_book_from_library():
 
 @router.get("/api/get/book/{genre}", status_code=200)
 async def get_all_genre_from_library(genre):
-    return await Book.find_many(Book.genrre == genre).to_list()
+    if books := await Book.find_many(Book.genrre == genre).to_list():
+        return books
+    raise HTTPException(status_code=400, detail="not found")
 
 
 @router.get("/api/get/author/{author}", status_code=200)
 async def get_all_author_from_library(author):
-    return await Book.find_many(Book.author == author).to_list()
-
-
+    if books := await Book.find_many(Book.author == author).to_list():
+        return books
+    raise HTTPException(status_code=400, detail="not found")

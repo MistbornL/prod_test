@@ -7,7 +7,7 @@ from beanie import init_beanie
 
 from .config import settings
 from prod.app.documents.document import User, Book, Library
-from prod.app.router.sex import router
+from prod.app.router.lib import router
 
 
 def create_app() -> FastAPI:
