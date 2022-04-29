@@ -1,7 +1,5 @@
 from datetime import timedelta
-from typing import List
 
-from beanie import PydanticObjectId
 from fastapi import APIRouter, HTTPException, Depends, status
 
 from fastapi.security import OAuth2PasswordRequestForm
@@ -41,24 +39,18 @@ async def add_book(book: Book, current_user: User = Depends(get_current_user)):
     return await book.save()
 
 
-
-
-@router.get("/api/get/book/fantasy", status_code=201)
-async def get_all_book_from_library():
-    lib = await Book.find_all().to_list()
-    for book in lib:
-        if book.genrre == "fantasy":
-            return book
-        raise HTTPException(status_code=400, detail="not found")
-
-
-@router.get("/api/get/all/book", status_code=201)
+@router.get("/api/get/all/book", status_code=200)
 async def get_all_book_from_library():
     return await Book.find_all().to_list()
 
 
-@router.get("/api/get/book/{genre}", status_code=201)
-async def get_all_book_from_library(genre):
-    if book := await Book.find({"genre": genre}).to_list():
-        return book
-    raise HTTPException(status_code=400, detail="not found")
+@router.get("/api/get/book/{genre}", status_code=200)
+async def get_all_genre_from_library(genre):
+    return await Book.find_many(Book.genrre == genre).to_list()
+
+
+@router.get("/api/get/author/{author}", status_code=200)
+async def get_all_author_from_library(author):
+    return await Book.find_many(Book.author == author).to_list()
+
+
