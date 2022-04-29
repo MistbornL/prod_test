@@ -5,7 +5,7 @@ from functools import lru_cache
 
 class BaseConfig:
     MONGODB_URL: str = os.environ.get("MONGODB_URL", "mongodb://localhost:27017")
-    MONGODB_DATABASE_NAME: str = os.environ.get("MONGODB_DATABASE_NAME", "dt")
+    MONGODB_DATABASE_NAME: str = os.environ.get("MONGODB_DATABASE_NAME", "library")
     SECRET_KEY = os.environ.get("SECRET_KEY")
     ALGORITHM = os.environ.get("ALGORITHM")
     ACCESS_TOKEN_EXPIRE_MINUTES = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES")

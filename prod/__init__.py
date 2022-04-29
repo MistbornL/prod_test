@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from beanie import init_beanie
 
 from .config import settings
-from prod.app.documents.document import User
+from prod.app.documents.document import User, Book, Library
 from prod.app.router.test import router
 
 
@@ -27,6 +27,6 @@ def create_app() -> FastAPI:
     async def startup_event():
         client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGODB_URL)
         await init_beanie(database=client[settings.MONGODB_DATABASE_NAME],
-                          document_models=[User])
+                          document_models=[User, Book, Library])
 
     return app

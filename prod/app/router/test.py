@@ -1,15 +1,15 @@
 from datetime import timedelta
 from typing import List
 
+from beanie import PydanticObjectId
 from fastapi import APIRouter, HTTPException, Depends, status
 
 from fastapi.security import OAuth2PasswordRequestForm
 
-from prod.app.documents.document import  User
+from prod.app.documents.document import Book, User
 from prod.app.auth.auth import authenticate_user, create_access_token, get_password_hash, get_current_user
 from prod.config import settings
 from prod.app.models.models import Token
-
 
 router = APIRouter(prefix="")
 
@@ -36,8 +36,29 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.post("/api/create/game", status_code=201)
-async def create_game(item, current_user: User = Depends(get_current_user)):
-    return await item.save()
+@router.post("/api/add/book", status_code=201)
+async def add_book(book: Book, current_user: User = Depends(get_current_user)):
+    return await book.save()
 
 
+
+
+@router.get("/api/get/book/fantasy", status_code=201)
+async def get_all_book_from_library():
+    lib = await Book.find_all().to_list()
+    for book in lib:
+        if book.genrre == "fantasy":
+            return book
+        raise HTTPException(status_code=400, detail="not found")
+
+
+@router.get("/api/get/all/book", status_code=201)
+async def get_all_book_from_library():
+    return await Book.find_all().to_list()
+
+
+@router.get("/api/get/book/{genre}", status_code=201)
+async def get_all_book_from_library(genre):
+    if book := await Book.find({"genre": genre}).to_list():
+        return book
+    raise HTTPException(status_code=400, detail="not found")
