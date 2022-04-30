@@ -12,6 +12,12 @@ from prod.app.models.models import Token
 router = APIRouter(prefix="")
 
 
+async def get_materials(option, target):
+    if books := await Book.find_many(option == target).to_list():
+        return books
+    raise HTTPException(status_code=400, detail="not found")
+
+
 @router.post("/signup")
 async def signup(user_data: User):
     user_data.password = get_password_hash(user_data.password)
@@ -46,7 +52,7 @@ async def get_all_book_from_library():
 
 @router.get("/api/get/book/{genre}", status_code=200)
 async def get_all_genre_from_library(genre):
-    if books := await Book.find_many(Book.genrre == genre).to_list():
+    if books := await Book.find_many(Book.genre == genre).to_list():
         return books
     raise HTTPException(status_code=400, detail="not found")
 

@@ -9,7 +9,7 @@ class User(Document):
 
 
 class Book(Document):
-    genrre: str
+    genre: str
     author: str
     name: str
     date: Optional[int] = 0
