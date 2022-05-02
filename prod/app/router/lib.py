@@ -62,3 +62,11 @@ async def get_all_author_from_library(author):
     if books := await Book.find_many(Book.author == author).to_list():
         return books
     raise HTTPException(status_code=400, detail="not found")
+
+
+@router.put("/api/update/book{name}")
+async def update_book(name: str, new_name: str):
+    if book := await Book.find_one(Book.name == name):
+        book.name = new_name
+        return await book.save()
+    raise HTTPException(status_code=400, detail="not found")
