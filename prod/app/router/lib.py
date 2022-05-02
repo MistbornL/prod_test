@@ -65,8 +65,16 @@ async def get_all_author_from_library(author):
 
 
 @router.put("/api/update/book{name}")
-async def update_book(name: str, new_name: str):
+async def update_book(name: str, new_name: str, current_user: User = Depends(get_current_user)):
     if book := await Book.find_one(Book.name == name):
         book.name = new_name
         return await book.save()
+    raise HTTPException(status_code=400, detail="not found")
+
+
+@router.delete("/api/delete/book/{name}")
+async def delete_book_bame(name, current_user: User = Depends(get_current_user)):
+    if book := Book.find_one(Book.name == name):
+        await book.delete()
+        return {"book": "deleted"}
     raise HTTPException(status_code=400, detail="not found")
